@@ -91,7 +91,72 @@ def nearestNeighbour(cities, neighbours, start):
     return cost
 
 
-print('Cost nearest neighbour:', nearestNeighbour(orase, vecini, orase[0]))
+print('\nCost nearest neighbour:', nearestNeighbour(orase, vecini, orase[0]))
 print('Drum nearest neighbour:', solNearest)
 
 
+# Algoritmul lui Prim; gaseste in O(m log n) un apcm
+
+def PrimAlgorithm(cities, neighbours, start):
+    Edges = []  # memoreaza muchiile APCM-ului
+    Vertices = [start]  # urmareste varfurile adaugate in APCM
+    Selected = defaultdict(lambda: 0)  # Dictionar de 'vizitati', pentru a verifica in O(1) daca varful este valabil
+    Selected[start] = 1
+
+    while len(Vertices) != len(cities):
+        muchieMinima = None
+        dimensiuneMinima = float('inf')
+        for nod in Vertices:  # caut muchia (u,v) de cost minim, cu u in Edges si v in afara lui
+            for vecin in neighbours[nod]:
+                if Selected[vecin[0]] == 0:
+                    if vecin[1] < dimensiuneMinima:
+                        dimensiuneMinima = vecin[1]
+                        muchieMinima = (nod, vecin[0], dimensiuneMinima)
+
+        Edges.append(muchieMinima)
+        Vertices.append(muchieMinima[1])
+        Selected[muchieMinima[1]] = 1
+
+    return Edges
+
+
+rezultatDFS = []  # variabila globala care memoreaza turul eulerian
+
+
+def DFS(graph, visited, actual=orase[0]):  # O(n) timp, O(n) memorie
+
+    global rezultatDFS
+    rezultatDFS.append(actual)
+    visited[actual] = 1
+
+    for vecin in graph[actual]:
+        if visited[vecin[0]] == 0:
+            DFS(graph, visited, vecin[0])
+
+    rezultatDFS.append(actual)
+
+
+# Double-tree , 2-aproximativ
+
+def doubleTree(cities, neighbours, start=orase[0]):
+    Edges = PrimAlgorithm(orase, vecini, orase[0])  # in Edges avem lista de muchii a APCM-ului
+
+    Graf = defaultdict(lambda: [])  # Graf orientat obtinut din dublarea lui Edhges
+    for edge in Edges:
+        Graf[edge[0]].append((edge[1], edge[2]))
+        Graf[edge[1]].append((edge[0], edge[2]))
+
+    visitedDFS = defaultdict(lambda: 0)
+    global rezultatDFS
+    DFS(Graf, visitedDFS, start)  # obtinem in 'rezultatDFS' un tur eulerian
+
+    rezultatDFS = list(dict.fromkeys(rezultatDFS))  # eliminam duplicatele din turul eulerian, obtinand 'scurtaturi'
+
+    cost = 0  # calcul cost; este de maxim 2 ori mai rau decat optimul
+    for i in range(-1, len(rezultatDFS) - 1):
+        cost += dist(rezultatDFS[i], rezultatDFS[i + 1])
+    print('\nCost double tree: ', cost)
+    print('Drum double tree: ', rezultatDFS)
+
+
+doubleTree(orase, vecini)

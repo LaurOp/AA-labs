@@ -22,3 +22,5 @@ cr = Chromosome(0, 100, 5)
 print(cr.bitlistToFloat())
 cr.bitsList = [False, False, True, True, False]
 print(cr.bitlistToFloat())
+
+
