@@ -1,13 +1,13 @@
 import math
 import random
 
+# TODO COMMENT THE CODE
+
 from Chromosome import Chromosome, recombine1breakPoint
 import auxiliaries
 
 populationSize, lowerBound, upperBound, coefficients, precision, \
-    crossoverProbability, mutationProbability, numberOfEpochs, chromosomeLength = auxiliaries.data.getAll()
-
-
+crossoverProbability, mutationProbability, numberOfEpochs, chromosomeLength = auxiliaries.data.getAll()
 
 file = open('evolutie.txt', 'w')
 actualPopulation = []
@@ -131,8 +131,12 @@ for epoch in range(numberOfEpochs):
     maxChromosome = max(selection, key=lambda x: x.functionValue)
 
     if epoch == 0:
-        file.write('\nEvolutia maximului: \n\n')
+        file.write('\nEvolutia maximului: \t\t\t Valoarea medie a performantei:\n\n')
 
-    file.write(str(maxChromosome.functionValue))
+    sumActual = 0
+    for chromo in actualPopulation:
+        sumActual += chromo.functionValue
+
+    file.write(f'{str(maxChromosome.functionValue)}\t\t\t\t{sumActual / populationSize}')
 
 file.close()
