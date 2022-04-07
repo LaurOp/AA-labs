@@ -13,6 +13,7 @@ def functionToMaximize(x, coeffs):
     return s
 
 
+# Functie ce preia input din consola
 def inputForAlgorithm():
     populationSize = int(input('Dimensiunea populatiei: ').strip())  # 20
 
@@ -48,6 +49,7 @@ def inputForAlgorithm():
     return populationSize, lowerBound, upperBound, coefficients, precision, crossoverProbability, mutationProbability, numberOfEpochs, chromosomeLength
 
 
+# date de intrare pentru algoritmul genetic
 class InputData:
     def __init__(self):
         self.populationSize, self.lowerBound, self.upperBound, self.coefficients, self.precision, \
@@ -56,9 +58,12 @@ class InputData:
     def getAll(self):
         return self.populationSize, self.lowerBound, self.upperBound, self.coefficients, self.precision, self.crossoverProbability, self.mutationProbability, self.numberOfEpochs, self.chromosomeLength
 
+
+# toate datele luate din consola sunt stocate in 'data' , pe care il accesez si din restul fisierelor
 data = InputData()
 
 
+# un binary search care cauta intervalul din vector caruia ii apartine valoarea
 def binarySearch(value, array):
     left = 0
     right = len(array)
