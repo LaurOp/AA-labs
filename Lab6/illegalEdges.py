@@ -9,6 +9,7 @@ xC, yC = int(xC), int(yC)
 xD, yD = int(xD), int(yD)
 
 
+# functie hardcoded de a calcula un det 3x3
 def determinant3x3(array):
     plus = array[0][0] * array[1][1] * array[2][2] + array[2][0] * array[0][1] * array[1][2] + array[0][2] * array[1][
         0] * array[2][1]
@@ -17,6 +18,8 @@ def determinant3x3(array):
     return plus - minus
 
 
+# cazul muchiei AC
+# determinantul 4x4 din curs simplificat la 3x3 dupa o scadere repetat a ultimei linii asupra tuturor celorlalte linii
 mat = [[xA - xD, yA - yD, xA * xA + yA * yA - xD * xD - yD * yD],
        [xB - xD, yB - yD, xB * xB + yB * yB - xD * xD - yD * yD],
        [xC - xD, yC - yD, xC * xC + yC * yC - xD * xD - yD * yD]]
@@ -28,6 +31,8 @@ if det <= 0:
 elif det > 0:
     print("AC: ILLEGAL")
 
+# cazul muchiei BD
+# determinantul 4x4 din curs simplificat la 3x3 dupa o scadere repetat a ultimei linii asupra tuturor celorlalte linii
 mat2 = [[xB - xA, yB - yA, xB * xB + yB * yB - xA * xA - yA * yA],
         [xC - xA, yC - yA, xC * xC + yC * yC - xA * xA - yA * yA],
         [xD - xA, yD - yA, xD * xD + yD * yD - xA * xA - yA * yA]]
