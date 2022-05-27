@@ -22,18 +22,22 @@ for _ in range(m):
     puncte.append((float(point[0]), float(point[1])))
 
 
-def intersectie(orizontale, verticale):
+def intersectie(orizontale, verticale, punct):
     # vom memora capetele impuse de plane
     st, dr, sus, jos = float('-inf'), float('inf'), float('inf'), float('-inf')
+    xCoord = punct[0]
+    yCoord = punct[1]
 
     # parcurgem intai planele verticale
     for (x, val) in verticale:
         if x > 0:  # x <= -val
             val /= (-x)
-            dr = min(val, dr)
+            if val > xCoord:
+                dr = min(val, dr)
         else:  # -x >= val
             val /= (-x)
-            st = max(val, st)
+            if val < xCoord:
+                st = max(val, st)
 
         # oprim codul daca dr < st , pt ca intersectia va fi vida sigur
         if dr < st:
@@ -43,10 +47,12 @@ def intersectie(orizontale, verticale):
         for (y, val) in orizontale:
             if y > 0:  # y <= -val
                 val /= (-y)
-                sus = min(val, sus)
+                if val > yCoord:
+                    sus = min(val, sus)
             else:  # y >= -val
                 val /= (-y)
-                jos = max(val, jos)
+                if val < yCoord:
+                    jos = max(val, jos)
 
             # oprim codul daca sus < jos , pt ca intersectia va fi vida sigur
             if sus < jos:
@@ -55,16 +61,18 @@ def intersectie(orizontale, verticale):
         else:
             # daca intersectia nu e vida dar are un capat infinit, este UNBOUNDED
             if float('inf') in [st, dr, jos, sus] or float('-inf') in [st, dr, jos, sus]:
-                return "UNBOUNDED"
+                return "FULLY_UNBOUNDED"
             else:
-                return "BOUNDED", (st, dr, jos, sus)
+                return st, dr, jos, sus
 
 
-raspuns = intersectie(orizontale, verticale)
+for punct in puncte:
+    raspuns = intersectie(orizontale, verticale, punct)
 
-if raspuns in ["VOID", "UNBOUNDED"]:
-    for _ in range(m):
+    if raspuns in ["VOID", "FULLY_UNBOUNDED"]:
         print("NO")
-else:
-    pass
+    else:
+        st, dr, jos, sus = raspuns
+        print("YES")
+        print(round((dr-st) * (sus-jos), 6))
 
